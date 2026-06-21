@@ -457,7 +457,7 @@ function paintGold(){const mc=LAST;const gpg=S.goldOz*TROY_OZ_PER_G,gpt=gpg*G_PE
   $("goldOut").innerHTML=`<div style="display:flex;align-items:baseline;gap:10px">
      <span class="mono" style="font-size:26px;color:var(--amber);font-weight:600">${fmtSci(tg)}</span>
      <span style="font-size:12px;color:var(--dim)">tonnes of gold equal the cost of 1 gram of antimatter</span></div>
-   <div class="mono" style="font-size:11px;color:var(--faint);margin-top:6px">1 tonne of gold ≈ $${fmtSci(gpt)} · that is about ${fmtSci(tg/ALL_GOLD_MINED_T,1)} times <i>all the gold ever mined</i> (~${ALL_GOLD_MINED_T.toLocaleString()} tonnes).</div>`;
+   <div class="mono" style="font-size:11px;color:var(--faint);margin-top:6px">1 tonne of gold ≈ $${fmtSci(gpt)} · 1g of antimatter costs about ${fmtSci(tg/ALL_GOLD_MINED_T,1)} times <i>all the gold ever mined</i> (~${ALL_GOLD_MINED_T.toLocaleString()} tonnes).</div>`;
   if(S.editRates&&$("goldIn"))$("goldIn").addEventListener('change',e=>{S.goldOz=parseFloat(e.target.value)||0;paintGold();paintCcy();});
 }
 function paintTornado(){const p=effParams();const base=(eta,oh,el)=>Math.log10(E_REST/eta*(el/J_PER_KWH)*oh);
