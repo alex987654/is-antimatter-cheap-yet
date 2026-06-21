@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Antimatter Cost Calculator</title>
-<meta name="description" content="Estimated cost of antimatter per gram: multi-currency, with order-of-magnitude error bands, a sensitivity view, production vs. shipment, and a speculative 20-invention cost-reduction sandbox." />
+<meta name="description" content="A Monte Carlo simulation grounded estimate for the cost of antimatter per gram: multi-currency, with order-of-magnitude error bands, a sensitivity view, production vs. shipment, and a speculative 20-invention cost-reduction sandbox." />
 <style>
   :root{
     --bg:#080B14; --panel:#0E1422; --panel2:#0B0F1B;
@@ -66,24 +66,24 @@
 
   <div class="eyebrow" style="color:var(--amber)">Is Antimatter Cheap Yet</div>
   <h1>Antimatter Cost <span style="color:var(--cyan)">/</span> gram</h1>
-  <div class="sub" style="margin-bottom:22px">energy floor (E=mc² ÷ η) × electricity × capital overhead → Monte Carlo distribution · 12 000 draws · with a speculative 20-invention cost-reduction sandbox</div>
+  <div class="sub" style="margin-bottom:22px">The lowest possible cost comes from the energy locked in the mass (Einstein's relationship: energy = mass × the speed of light squared), divided by how efficiently we can produce antimatter, then multiplied by the electricity price and a capital-overhead factor. The result is shown as a full range of outcomes built from 12000 randomized trials (a method called Monte Carlo simulation), alongside a sandbox of 20 cost-reducing inventions.</div>
 
   <!-- HERO -->
   <div class="gridbg" style="border:1px solid var(--lineStrong);border-radius:14px;padding:22px 24px;margin-bottom:18px;overflow:hidden">
     <div class="eyebrow"><span id="heroSpecies">Antiprotons</span> · median estimate <span id="stackBadge" style="color:var(--amber)"></span></div>
     <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-top:6px">
       <div class="mono" id="heroVal" style="font-size:40px;font-weight:600;color:var(--cyan);letter-spacing:-0.01em">—</div>
-      <div style="font-size:13px;color:var(--dim)">USD / gram</div>
+      <div style="font-size:13px;color:var(--dim)">US dollars per gram</div>
     </div>
     <div style="margin-top:18px">
       <div class="mono" style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--faint);margin-bottom:5px">
-        <span>$10³</span><span>$10⁷</span><span>$10¹¹</span><span>$10¹⁵</span><span>$10¹⁹</span>
+        <span>$1 thousand</span><span>$10 million</span><span>$100 billion</span><span>$1 quadrillion</span><span>$10 quintillion</span>
       </div>
       <div id="logbar" style="position:relative;height:34px;background:var(--panel2);border-radius:6px;border:1px solid var(--line)"></div>
       <div class="mono" style="display:flex;justify-content:space-between;font-size:11px;color:var(--dim);margin-top:7px">
-        <span id="p5lab">P5 —</span>
+        <span id="p5lab">5th percentile —</span>
         <span id="spreadlab" style="color:var(--amber)"></span>
-        <span id="p95lab">P95 —</span>
+        <span id="p95lab">95th percentile —</span>
       </div>
     </div>
     <div style="font-size:11px;color:var(--faint);margin-top:10px" id="anchorNote"></div>
@@ -93,11 +93,11 @@
   <div class="row cols2">
     <!-- controls -->
     <div class="panel">
-      <div class="eyebrow" style="color:var(--amber)">Inputs · drag to perturb</div>
+      <div class="eyebrow" style="color:var(--amber)">Inputs · drag to adjust</div>
       <div id="presets" style="display:flex;gap:6px;margin:12px 0 18px;flex-wrap:wrap"></div>
       <div id="controls"></div>
       <div style="border-top:1px solid var(--line);margin:8px 0 14px"></div>
-      <div class="eyebrow">Forward projection · learning curve (speculative)</div>
+      <div class="eyebrow">Looking ahead · projected future cost decline (speculative)</div>
       <div style="height:8px"></div>
       <div id="projControls"></div>
     </div>
@@ -105,30 +105,30 @@
     <div style="display:flex;flex-direction:column;gap:18px">
       <div class="panel">
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <div class="eyebrow" style="color:var(--amber)">Cost / gram · 9 currencies</div>
-          <button class="btn sm" id="editRates">edit rates</button>
+          <div class="eyebrow" style="color:var(--amber)">Cost per gram · 9 currencies</div>
+          <button class="btn sm" id="editRates">edit exchange rates</button>
         </div>
         <div id="ccyTable" style="margin-top:10px"></div>
         <div style="font-size:10.5px;color:var(--faint);margin-top:8px" id="ccyNote"></div>
       </div>
       <div class="panel">
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <div class="eyebrow" style="color:var(--amber)">vs. 1 metric tonne of gold</div>
+          <div class="eyebrow" style="color:var(--amber)">Compared with 1 metric tonne of gold</div>
           <span class="mono" id="goldRate" style="font-size:11px;color:var(--dim)"></span>
         </div>
         <div id="goldOut" style="margin-top:8px"></div>
       </div>
       <div class="panel">
-        <div class="eyebrow" style="color:var(--amber)">Sensitivity · which input owns the error bar</div>
+        <div class="eyebrow" style="color:var(--amber)">Sensitivity · which input drives the uncertainty</div>
         <div id="tornado" style="margin-top:12px"></div>
-        <div style="font-size:10.5px;color:var(--faint);margin-top:4px">Bars = output swing (orders of magnitude) from a ±1σ move in each input alone. η usually dominates → any method's robustness hinges on pinning η.</div>
+        <div style="font-size:10.5px;color:var(--faint);margin-top:4px">Each bar shows how far the result swings (in orders of magnitude — that is, factors of ten) when that one input is moved by a single standard deviation while the others are held fixed. The production efficiency usually dominates, so how reliable any estimate is depends on pinning that efficiency down.</div>
       </div>
     </div>
   </div>
 
   <!-- HISTOGRAM -->
   <div class="panel" style="margin-top:18px">
-    <div class="eyebrow" style="color:var(--amber)">Cost distribution · log₁₀(USD/g)</div>
+    <div class="eyebrow" style="color:var(--amber)">Cost distribution · shown on a logarithmic scale, in US dollars per gram</div>
     <div id="hist" style="display:flex;align-items:flex-end;gap:2px;height:90px;margin-top:14px"></div>
     <div class="mono" style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--faint);margin-top:6px">
       <span id="histLo"></span><span id="histHi"></span>
@@ -140,14 +140,14 @@
     <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
       <div>
         <div class="eyebrow" style="color:var(--amber)">Cost-reduction sandbox · 20 inventions</div>
-        <div class="sub" style="margin-top:5px">Click to add an invention to the applied stack — each shows its standalone effect; the stack shows the <i>ordered cumulative</i> path. Everything else held constant.</div>
+        <div class="sub" style="margin-top:5px">Click an invention to add it to your applied list — each one shows its effect on its own; the list shows the running cumulative effect as you build it up, with everything else held constant.</div>
       </div>
       <div style="display:flex;gap:6px;align-items:center">
         <select id="horizonFilter" class="mkin" style="width:auto">
-          <option value="all">all horizons</option>
-          <option value="Near">Near ≤5 yr</option>
-          <option value="Mid">Mid 5–20 yr</option>
-          <option value="Far">Far 20 yr+</option>
+          <option value="all">all time horizons</option>
+          <option value="Near">Near term (5 years or less)</option>
+          <option value="Mid">Medium term (5 to 20 years)</option>
+          <option value="Far">Far term (20 years or more)</option>
         </select>
         <button class="btn sm" id="applyAll">apply all</button>
         <button class="btn sm" id="clearStack">clear</button>
@@ -160,10 +160,10 @@
         <div id="invList" class="invlist"></div>
       </div>
       <div>
-        <div class="eyebrow" style="margin-bottom:8px">Applied stack · ordered cumulative impact</div>
+        <div class="eyebrow" style="margin-bottom:8px">Applied inventions · running cumulative impact</div>
         <div id="stackPanel" class="panel" style="background:var(--panel2)"></div>
         <div style="font-size:10.5px;color:var(--faint);margin-top:8px">
-          The <i>endpoint</i> is order-independent (multiplicative). The <i>path</i> depends on order — reorder with ▲▼ to read each step's marginal contribution. Energy-floor line marks the η→1 limit no invention can cross.
+          The end result is the same no matter what order you apply the inventions in (their effects multiply together). The path to get there depends on the order — use the up and down arrows to reorder them and read how much each step adds on its own. The energy-floor line marks the lowest cost reachable if efficiency were 100%, a limit no combination of inventions can cross.
         </div>
       </div>
     </div>
@@ -171,7 +171,7 @@
 
   <!-- SHIPMENT -->
   <div class="gridbg" style="border:1px solid var(--lineStrong);border-radius:12px;padding:18px;margin-top:18px;overflow:hidden">
-    <div class="eyebrow" style="color:var(--amber)">Shipment · <a class="src" href="https://home.cern/base-experiment-cern-succeeds-transporting-antimatter/" target="_blank" rel="noopener" style="color:inherit">BASE-STEP</a> regime (fixed cost ÷ payload mass)</div>
+    <div class="eyebrow" style="color:var(--amber)">Shipment · based on CERN's portable antiproton trap (<a class="src" href="https://home.cern/base-experiment-cern-succeeds-transporting-antimatter/" target="_blank" rel="noopener" style="color:inherit">BASE-STEP</a>) — a fixed cost per trip divided by the payload mass</div>
     <div class="row cols2" style="margin-top:12px">
       <div id="shipControls"></div>
       <div style="display:flex;flex-direction:column;justify-content:center" id="shipOut"></div>
@@ -209,8 +209,8 @@
   </div>
 
   <div class="mono" style="font-size:10px;color:var(--faint);margin-top:20px;line-height:1.7">
-    Model: cost/g = (9×10¹³ J/g ÷ η) × electricity[$/J] × overhead × projection × invention-stack. η, overhead, electricity sampled log-normally; η clamped ≤ 1 (energy floor). Reproduces the published spread by construction — not a measurement.
-    Market data editable, ~18 Jun 2026. Shipment grounded in <a class="src" href="https://home.cern/base-experiment-cern-succeeds-transporting-antimatter/" target="_blank" rel="noopener">CERN BASE-STEP</a> (92 antiprotons moved by truck, 24 Mar 2026). Inventions are illustrative parameter-deltas, not forecasts.
+    How the number is built: cost per gram = (the energy locked in one gram of mass, 9×10¹³ joules, divided by the production efficiency) × the electricity price (in dollars per joule) × a capital-and-labor overhead factor × an optional future-decline factor × the combined effect of any inventions you apply. The efficiency, the overhead, and the electricity price are each varied randomly (using a log-normal spread — bell-shaped on a logarithmic scale) across thousands of trials; efficiency is capped at 100% (the energy floor). The tool reproduces the range of published estimates by design — it is not a measurement.
+    Market data is editable and current as of about 18 June 2026. The shipment section is based on CERN's first antimatter transport — <a class="src" href="https://home.cern/base-experiment-cern-succeeds-transporting-antimatter/" target="_blank" rel="noopener">92 antiprotons moved by truck on 24 March 2026</a>. The inventions are illustrative adjustments to the inputs, not forecasts.
   </div>
 </div>
 
@@ -227,6 +227,8 @@ const FX_PEG={AED:1,SAR:1};
 const CCY=["USD","EUR","CNY","CHF","JPY","SGD","AUD","AED","SAR"];
 const DEFAULT_GOLD_OZ=4150;
 const ALL_GOLD_MINED_T=216000;
+const CCY_NAMES={USD:"US dollar",EUR:"Euro",CNY:"Chinese yuan",CHF:"Swiss franc",JPY:"Japanese yen",SGD:"Singapore dollar",AUD:"Australian dollar",AED:"UAE dirham",SAR:"Saudi riyal"};
+const HZ_LABEL={Near:"Near term",Mid:"Medium term",Far:"Far term"};
 
 // canonical sources for the cost anchors (verified)
 const SRC={
@@ -238,54 +240,54 @@ const SRC={
 const link=(href,txt,extra="")=>`<a class="src" href="${href}" target="_blank" rel="noopener" ${extra}>${txt}</a>`;
 
 const PRESETS={
-  positron:{label:"Positrons (e⁺)",etaMean:-5.0,etaSd:0.7,ohMean:2,anchor:"≈ $1×10¹¹ /g — cheap; PET-grade sources already exist"},
-  antiproton:{label:"Antiprotons (p̄)",etaMean:-8.0,etaSd:0.6,ohMean:3,anchor:link(SRC.nasa,"NASA")+" $6.25×10¹³ /g · "+link(SRC.pbs,"PBS")+" up to $3×10¹⁵ /g"},
-  antihydrogen:{label:"Antihydrogen (H̄)",etaMean:-8.5,etaSd:0.6,ohMean:6,anchor:"p̄ + e⁺ + trap-assembly losses — highest of the three"}
+  positron:{label:"Positrons",etaMean:-5.0,etaSd:0.7,ohMean:2,anchor:"≈ $1×10¹¹ per gram — relatively cheap; medical-imaging-grade sources (used in positron-emission-tomography scanners) already exist"},
+  antiproton:{label:"Antiprotons",etaMean:-8.0,etaSd:0.6,ohMean:3,anchor:link(SRC.nasa,"NASA")+"'s estimate: $6.25×10¹³ per gram · up to $3×10¹⁵ per gram ("+link(SRC.pbs,"Public Broadcasting Service")+")"},
+  antihydrogen:{label:"Antihydrogen",etaMean:-8.5,etaSd:0.6,ohMean:6,anchor:"antiproton + positron + trap-assembly losses — the highest of the three"}
 };
 const LIT=[{v:1e11},{v:6.25e13},{v:2.7e15},{v:3e15}];
 
 // 20 inventions. effects multiply parameters: eta>1 improves efficiency (cost↓);
 // overhead/elec <1 reduce cost; trapCap multiplies shipment payload; shipFixed scales trip cost.
 const INVENTIONS=[
- {id:1, name:"Optimized production targets", lever:"yield η ×2.5", hz:"Near", kind:"prod", eta:2.5,
-   desc:"Tungsten/iridium target geometry tuned for antiproton yield per incident proton."},
- {id:2, name:"Wide-acceptance collection (horn / Li lens)", lever:"η ×8", hz:"Near", kind:"prod", eta:8,
-   desc:"Capture a far larger solid angle of produced antiprotons — today only a tiny fraction is caught."},
- {id:3, name:"Higher-power driver proton beam", lever:"η ×3", hz:"Near", kind:"prod", eta:3,
-   desc:"More antiprotons per pulse from a higher-current, higher-energy driver."},
- {id:4, name:"Energy-recovery superconducting linac", lever:"η ×2 · elec ×0.7", hz:"Mid", kind:"prod", eta:2, elec:0.7,
-   desc:"Recover beam energy each cycle, raising wall-plug efficiency."},
- {id:5, name:"Laser-driven pair production", lever:"η ×50", hz:"Far", kind:"prod", eta:50, spec:true,
-   desc:"Intense-laser QED pair creation — a different production regime; potentially far more efficient for light antiparticles."},
- {id:6, name:"Plasma-wakefield compact driver", lever:"overhead ×0.5 · elec ×0.7", hz:"Mid", kind:"prod", overhead:0.5, elec:0.7,
-   desc:"High-gradient acceleration shrinks the machine and its capital footprint (cf. AWAKE)."},
- {id:7, name:"Advanced multi-stage cooling", lever:"η ×4", hz:"Near", kind:"prod", eta:4,
-   desc:"Stochastic + electron + laser cooling so more antiprotons survive to usable low energy."},
- {id:8, name:"Large-scale Penning accumulation", lever:"overhead ×0.6", hz:"Near", kind:"prod", overhead:0.6,
-   desc:"Stack and bank far more antiprotons per run, amortizing fixed cost over more output."},
- {id:9, name:"Laser-controlled H̄ recombination", lever:"η ×3", hz:"Mid", kind:"prod", eta:3,
-   desc:"Higher antiproton+positron → antihydrogen conversion efficiency."},
- {id:10,name:"High-Tc cryogenics & pulse-tube coolers", lever:"overhead ×0.6 · elec ×0.85", hz:"Mid", kind:"prod", overhead:0.6, elec:0.85,
+ {id:1, name:"Optimized production targets", lever:"efficiency ×2.5", hz:"Near", kind:"prod", eta:2.5,
+   desc:"Tungsten and iridium target geometry tuned for antiproton yield per incoming proton."},
+ {id:2, name:"Wide-acceptance collection (magnetic horn / lithium lens)", lever:"efficiency ×8", hz:"Near", kind:"prod", eta:8,
+   desc:"Capture a far larger cone of the antiprotons produced — today only a tiny fraction is caught."},
+ {id:3, name:"Higher-power driver proton beam", lever:"efficiency ×3", hz:"Near", kind:"prod", eta:3,
+   desc:"More antiprotons per pulse from a higher-current, higher-energy driver beam."},
+ {id:4, name:"Energy-recovery superconducting accelerator", lever:"efficiency ×2 · electricity ×0.7", hz:"Mid", kind:"prod", eta:2, elec:0.7,
+   desc:"Recover the beam energy each cycle, raising the share of wall-plug energy that does useful work."},
+ {id:5, name:"Laser-driven pair production", lever:"efficiency ×50", hz:"Far", kind:"prod", eta:50, spec:true,
+   desc:"Pair creation driven by intense lasers (a quantum-electrodynamic process) — a different production regime, potentially far more efficient for light antiparticles."},
+ {id:6, name:"Plasma-wakefield compact driver", lever:"overhead ×0.5 · electricity ×0.7", hz:"Mid", kind:"prod", overhead:0.5, elec:0.7,
+   desc:"High-gradient acceleration shrinks the machine and its capital footprint (see CERN's plasma-wakefield experiment, AWAKE)."},
+ {id:7, name:"Advanced multi-stage cooling", lever:"efficiency ×4", hz:"Near", kind:"prod", eta:4,
+   desc:"Stochastic, electron, and laser cooling so more antiprotons survive down to usable low energy."},
+ {id:8, name:"Large-scale Penning-trap accumulation", lever:"overhead ×0.6", hz:"Near", kind:"prod", overhead:0.6,
+   desc:"Bank far more antiprotons per run, spreading the fixed cost over more output."},
+ {id:9, name:"Laser-controlled antihydrogen recombination", lever:"efficiency ×3", hz:"Mid", kind:"prod", eta:3,
+   desc:"Higher conversion efficiency when antiprotons and positrons combine into antihydrogen."},
+ {id:10,name:"High-temperature superconducting cryogenics & pulse-tube coolers", lever:"overhead ×0.6 · electricity ×0.85", hz:"Mid", kind:"prod", overhead:0.6, elec:0.85,
    desc:"Cut the liquid-helium and cooling-power overhead dramatically."},
  {id:11,name:"Dedicated antimatter factory", lever:"overhead ×0.35", hz:"Mid", kind:"prod", overhead:0.35,
-   desc:"Purpose-built facility removes the shared-cost allocation penalty of a multi-program lab."},
+   desc:"A purpose-built facility removes the shared-cost penalty of charging part of a multi-program laboratory's budget to antimatter."},
  {id:12,name:"Continuous-duty production", lever:"overhead ×0.55", hz:"Mid", kind:"prod", overhead:0.55,
-   desc:"Run continuously rather than in short pulses — duty-cycle gains on throughput."},
- {id:13,name:"Co-located cheap dedicated power", lever:"elec ×0.35", hz:"Near", kind:"prod", elec:0.35,
-   desc:"Nuclear / solar / geothermal supply at the facility instead of grid retail rates."},
- {id:14,name:"Modular mass-produced accelerators", lever:"overhead ×0.5", hz:"Far", kind:"prod", overhead:0.5,
-   desc:"Learning-curve on capital — build accelerator units like product lines, not monuments."},
+   desc:"Run continuously rather than in short pulses, raising throughput."},
+ {id:13,name:"Co-located cheap dedicated power", lever:"electricity ×0.35", hz:"Near", kind:"prod", elec:0.35,
+   desc:"Nuclear, solar, or geothermal supply at the facility instead of retail grid rates."},
+ {id:14,name:"Modular, mass-produced accelerators", lever:"overhead ×0.5", hz:"Far", kind:"prod", overhead:0.5,
+   desc:"Build accelerator units like product lines rather than one-off monuments, so the capital cost per unit falls."},
  {id:15,name:"Automated remote operation", lever:"overhead ×0.75", hz:"Near", kind:"prod", overhead:0.75,
    desc:"Lower the standing labor cost of running the facility."},
  {id:16,name:"Waste-heat cogeneration", lever:"overhead ×0.85", hz:"Near", kind:"prod", overhead:0.85,
    desc:"Sell or reuse the enormous waste heat to offset operating cost."},
- {id:17,name:"High-capacity traps (10⁹ p̄ / trap)", lever:"trap payload ×10⁷", hz:"Mid", kind:"ship", trapCap:1e7,
-   desc:"Carry vastly more antiprotons per trap — collapses the per-gram shipment cost."},
+ {id:17,name:"High-capacity traps (10⁹ antiprotons per trap)", lever:"trap payload ×10⁷", hz:"Mid", kind:"ship", trapCap:1e7,
+   desc:"Carry vastly more antiprotons per trap — this collapses the per-gram shipment cost."},
  {id:18,name:"Loss-free long-term storage", lever:"overhead ×0.85", hz:"Mid", kind:"prod", overhead:0.85,
-   desc:"Better vacuum and materials → fewer annihilation losses between production and use."},
- {id:19,name:"Reduced-cryo / warm confinement", lever:"overhead ×0.75", hz:"Far", kind:"prod", overhead:0.75, spec:true,
-   desc:"Novel confinement needing less (or no) deep cryogenics for storage."},
- {id:20,name:"In-situ production at point of use", lever:"shipment → 0", hz:"Far", kind:"ship", shipFixed:0, spec:true,
+   desc:"Better vacuum and materials mean fewer losses to annihilation between production and use."},
+ {id:19,name:"Reduced-cooling / warm confinement", lever:"overhead ×0.75", hz:"Far", kind:"prod", overhead:0.75, spec:true,
+   desc:"New confinement needing less (or no) deep cooling for storage."},
+ {id:20,name:"On-site production at the point of use", lever:"shipment → 0", hz:"Far", kind:"ship", shipFixed:0, spec:true,
    desc:"Make it where it's needed and eliminate transport entirely."}
 ];
 
@@ -293,8 +295,8 @@ const INVENTIONS=[
 function randn(){let u=0,v=0;while(u===0)u=Math.random();while(v===0)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
 const SUP={"-":"⁻","0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹"};
 function sup(n){return String(n).split("").map(c=>SUP[c]||c).join("");}
-function fmtSci(x,d=2){if(!isFinite(x)||x<=0)return"—";const e=Math.floor(Math.log10(x));const m=x/Math.pow(10,e);return m.toFixed(d)+" × 10"+sup(e);}
-function fmtMoney(x){if(!isFinite(x)||x<=0)return"—";if(x>=1e12)return fmtSci(x);if(x>=1e9)return(x/1e9).toFixed(1)+"B";if(x>=1e6)return(x/1e6).toFixed(1)+"M";if(x>=1e3)return(x/1e3).toFixed(1)+"k";return x.toFixed(0);}
+function fmtSci(x,d=2){if(!isFinite(x)||x<=0)return"—";const e=Math.floor(Math.log10(x));const m=x/Math.pow(10,e);return e===0?m.toFixed(d):m.toFixed(d)+" × 10"+sup(e);}
+function fmtMoney(x){if(!isFinite(x)||x<=0)return"—";if(x>=1e12)return fmtSci(x);if(x>=1e9)return(x/1e9).toFixed(1)+" billion";if(x>=1e6)return(x/1e6).toFixed(1)+" million";if(x>=1e3)return(x/1e3).toFixed(1)+" thousand";return x.toFixed(0);}
 function pct(sorted,p){const i=(sorted.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return lo===hi?sorted[lo]:sorted[lo]+(sorted[hi]-sorted[lo])*(i-lo);}
 
 // storage shim: localStorage on GitHub Pages, memory fallback inside sandboxes
@@ -354,9 +356,9 @@ const VARC={cyan:"#6BE5FF",amber:"#FFB454"};
 function buildControls(){
   $("presets").innerHTML=Object.keys(PRESETS).map(k=>`<button class="btn" data-preset="${k}" id="pr_${k}">${PRESETS[k].label}</button>`).join("");
   $("controls").innerHTML=[
-   {k:"etaMean",label:"Production efficiency  log₁₀(η)",min:-11,max:-3,step:0.1,val:S.etaMean,accent:VARC.amber,hint:1},
-   {k:"etaSd",label:"η uncertainty (σ, log₁₀)",min:0.1,max:1.2,step:0.05,val:S.etaSd,accent:VARC.amber},
-   {k:"ohMean",label:"Capital + labor overhead ×",min:1,max:20,step:0.5,val:S.ohMean,accent:VARC.cyan,hint:1},
+   {k:"etaMean",label:"Production efficiency (shown on a logarithmic scale)",min:-11,max:-3,step:0.1,val:S.etaMean,accent:VARC.amber,hint:1},
+   {k:"etaSd",label:"Uncertainty in the efficiency (one standard deviation, on a logarithmic scale)",min:0.1,max:1.2,step:0.05,val:S.etaSd,accent:VARC.amber},
+   {k:"ohMean",label:"Capital and labor overhead (multiplier)",min:1,max:20,step:0.5,val:S.ohMean,accent:VARC.cyan,hint:1},
    {k:"elec",label:"Electricity price",min:0.03,max:0.30,step:0.005,val:S.elec,accent:VARC.cyan},
   ].map(ctrlHTML).join("");
   $("projControls").innerHTML=[
@@ -364,8 +366,8 @@ function buildControls(){
    {k:"projRate",label:"Annual cost decline",min:0,max:0.30,step:0.01,val:S.projRate,accent:VARC.amber,hint:1},
   ].map(ctrlHTML).join("");
   $("shipControls").innerHTML=[
-   {k:"shipTrip",label:"Cost per transport run (truck, crew, LHe)",min:20000,max:2000000,step:10000,val:S.shipTrip,accent:VARC.cyan},
-   {k:"shipN",label:"Payload · antiprotons per trap (base)",min:92,max:1e9,step:1,val:S.shipN,accent:VARC.amber,hint:1},
+   {k:"shipTrip",label:"Cost per transport run (truck, crew, liquid helium)",min:20000,max:2000000,step:10000,val:S.shipTrip,accent:VARC.cyan},
+   {k:"shipN",label:"Payload · antiprotons per trap (starting value)",min:92,max:1e9,step:1,val:S.shipN,accent:VARC.amber,hint:1},
   ].map(ctrlHTML).join("");
   // listeners
   document.querySelectorAll('input[type=range]').forEach(r=>{
@@ -382,19 +384,19 @@ function buildControls(){
 }
 
 function fmtCtrl(){
-  $("v_etaMean").textContent="η = "+fmtSci(Math.pow(10,S.etaMean));
-  $("v_etaSd").textContent="±"+S.etaSd.toFixed(2)+" dex";
-  $("v_ohMean").textContent=S.ohMean.toFixed(1)+"×";
-  $("v_elec").textContent="$"+S.elec.toFixed(3)+"/kWh";
-  $("v_projYears").textContent=S.projYears+" yr";
-  $("v_projRate").textContent=(S.projRate*100).toFixed(0)+"%/yr";
+  $("v_etaMean").textContent="efficiency = "+fmtSci(Math.pow(10,S.etaMean));
+  $("v_etaSd").textContent="± "+S.etaSd.toFixed(2)+" orders of magnitude";
+  $("v_ohMean").textContent=S.ohMean.toFixed(1)+" times";
+  $("v_elec").textContent="$"+S.elec.toFixed(3)+" per kilowatt-hour";
+  $("v_projYears").textContent=S.projYears+(S.projYears===1?" year":" years");
+  $("v_projRate").textContent=(S.projRate*100).toFixed(0)+"% per year";
   $("v_shipTrip").textContent="$"+fmtMoney(S.shipTrip);
-  $("v_shipN").textContent=fmtSci(S.shipN,1)+" p̄";
+  $("v_shipN").textContent=fmtSci(S.shipN,1)+" antiprotons";
   const f=stackFactors();
-  $("h_etaMean").textContent="wall-plug → stored antimatter energy"+(f.eta!==1?"  · stack ×"+fmtSci(f.eta,1):"")+". dominant uncertainty.";
-  $("h_ohMean").textContent="facility, cooling, staff, storage"+(f.overhead!==1?"  · stack ×"+f.overhead.toFixed(3):"");
-  $("h_projRate").textContent=S.projYears>0?("projected ×"+Math.pow(1-S.projRate,S.projYears).toExponential(1)+" vs today"):"set years > 0 to activate";
-  $("h_shipN").textContent="= "+fmtSci(S.shipN*f.trapCap*MP_G)+" g/trap ("+fmtSci(S.shipN*f.trapCap,1)+" p̄)"+(f.trapCap!==1?" · ×"+fmtSci(f.trapCap,0)+" from stack":"")+" · BASE-STEP carried 92";
+  $("h_etaMean").textContent="the share of wall-plug energy that ends up stored as antimatter"+(f.eta!==1?"  · inventions multiply this by "+fmtSci(f.eta,1):"")+". This is the single biggest source of uncertainty.";
+  $("h_ohMean").textContent="covers the facility, cooling, staff, and storage"+(f.overhead!==1?"  · inventions multiply this by "+f.overhead.toFixed(3):"");
+  $("h_projRate").textContent=S.projYears>0?("projected to be "+Math.pow(1-S.projRate,S.projYears).toExponential(1)+" times today's cost"):"set the number of years above zero to switch this on";
+  $("h_shipN").textContent="= "+fmtSci(S.shipN*f.trapCap*MP_G)+" grams per trap ("+fmtSci(S.shipN*f.trapCap,1)+" antiprotons)"+(f.trapCap!==1?" · ×"+fmtSci(f.trapCap,0)+" from the inventions":"")+" · CERN's first transport carried 92";
 }
 
 function paintHero(mc){
@@ -407,50 +409,50 @@ function paintHero(mc){
   h+=`<div style="position:absolute;left:${xof(mc.p5)}%;width:${wof(mc.p5,mc.p95)}%;top:4px;bottom:4px;background:var(--band);border:1px solid rgba(107,229,255,0.4);border-radius:4px"></div>`;
   h+=`<div style="position:absolute;left:${xof(mc.p25)}%;width:${wof(mc.p25,mc.p75)}%;top:4px;bottom:4px;background:rgba(107,229,255,0.28);border-radius:4px"></div>`;
   h+=`<div style="position:absolute;left:${xof(mc.med)}%;top:-2px;bottom:-2px;width:2px;background:var(--amber)"></div>`;
-  const fl=energyFloor();h+=`<div style="position:absolute;left:${xof(fl)}%;top:-4px;bottom:-4px;width:1px;background:#7CFFB0" title="energy floor η=1"></div>`;
+  const fl=energyFloor();h+=`<div style="position:absolute;left:${xof(fl)}%;top:-4px;bottom:-4px;width:1px;background:#7CFFB0" title="energy floor at 100% efficiency"></div>`;
   $("logbar").innerHTML=h;
-  $("p5lab").textContent="P5  $"+fmtSci(mc.p5);
-  $("p95lab").textContent="P95 $"+fmtSci(mc.p95);
-  $("spreadlab").textContent="spread ≈ "+(Math.log10(mc.p95)-Math.log10(mc.p5)).toFixed(1)+" orders of magnitude";
-  $("anchorNote").innerHTML="Hairlines = published anchors (positron est. · "+link(SRC.nasa,"NASA")+" $62.5T · "+link(SRC.physicsgirl,"Physics Girl")+" $2700T · "+link(SRC.pbs,"PBS")+" $3Q) · <span style='color:#7CFFB0'>green</span> = energy floor (η→1). Anchor: "+PRESETS[S.preset].anchor;
+  $("p5lab").textContent="5th percentile  $"+fmtSci(mc.p5);
+  $("p95lab").textContent="95th percentile $"+fmtSci(mc.p95);
+  $("spreadlab").textContent="spread ≈ "+(Math.log10(mc.p95)-Math.log10(mc.p5)).toFixed(1)+" orders of magnitude (factors of ten)";
+  $("anchorNote").innerHTML="The thin vertical lines mark published estimates: a rough positron figure, "+link(SRC.nasa,"NASA")+"'s $62.5 trillion per gram, the "+link(SRC.physicsgirl,"Physics Girl")+" video's $2,700 trillion, and the "+link(SRC.pbs,"Public Broadcasting Service")+" figure of $3 quadrillion. The <span style='color:#7CFFB0'>green</span> line is the energy floor (the cost if efficiency reached 100%). For this particle: "+PRESETS[S.preset].anchor;
 }
 function deltaOOM(){const base=pointCost(S.etaMean,S.ohMean,S.elec); // current sliders, no stack — matches the waterfall baseline
   const p=effParams();const now=pointCost(p.etaMean,p.ohMean,p.elec);
-  const d=Math.log10(now/base);return(d>=0?"+":"")+d.toFixed(1)+" OOM";}
+  const d=Math.log10(now/base);return(d>=0?"+":"")+d.toFixed(1)+" orders of magnitude";}
 
 function paintCcy(){const mc=LAST;
   let rows=CCY.map(cc=>{const r=S.fx[cc];const rateCell=(S.editRates&&cc!=="USD")
     ? `<input class="mkin" style="width:64px" value="${r}" data-fx="${cc}">`
     : (cc==="USD"?"1.000":r.toLocaleString(undefined,{maximumFractionDigits:4}));
     return `<tr style="border-top:1px solid var(--line)">
-      <td style="padding:6px 0;color:${cc==="USD"?"var(--cyan)":"var(--text)"}">${cc}${FX_PEG[cc]?' <span style="color:var(--faint);font-size:9px">⚓</span>':''}</td>
+      <td style="padding:6px 0;color:${cc==="USD"?"var(--cyan)":"var(--text)"}">${CCY_NAMES[cc]}${FX_PEG[cc]?' <span style="color:var(--faint);font-size:9px">⚓</span>':''}</td>
       <td style="text-align:right;color:var(--dim)">${rateCell}</td>
       <td style="text-align:right;color:var(--cyan)">${fmtSci(mc.med*r)}</td>
       <td style="text-align:right;color:var(--dim);font-size:10.5px">${fmtSci(mc.p5*r,1)} – ${fmtSci(mc.p95*r,1)}</td></tr>`;}).join("");
   $("ccyTable").innerHTML=`<table style="font-size:12px"><thead><tr style="color:var(--faint);font-size:10px;text-align:right">
-    <th style="text-align:left;font-weight:500;padding-bottom:6px">ccy</th><th style="font-weight:500">rate</th>
-    <th style="font-weight:500">median</th><th style="font-weight:500">P5 – P95</th></tr></thead><tbody>${rows}</tbody></table>`;
-  $("ccyNote").innerHTML="⚓ = USD-pegged. Rates ~18 Jun 2026; FX adds &lt;2% vs the ~"+(Math.log10(mc.p95)-Math.log10(mc.p5)).toFixed(0)+"-OOM physics uncertainty.";
+    <th style="text-align:left;font-weight:500;padding-bottom:6px">currency</th><th style="font-weight:500">exchange rate (per US dollar)</th>
+    <th style="font-weight:500">median</th><th style="font-weight:500">5th – 95th percentile</th></tr></thead><tbody>${rows}</tbody></table>`;
+  $("ccyNote").innerHTML="The anchor symbol (⚓) marks currencies pegged to the US dollar. Exchange rates as of about 18 June 2026; converting between currencies adds less than 2% of uncertainty — far below the roughly "+(Math.log10(mc.p95)-Math.log10(mc.p5)).toFixed(0)+" orders of magnitude of uncertainty in the underlying physics.";
   if(S.editRates)document.querySelectorAll('[data-fx]').forEach(inp=>inp.addEventListener('change',e=>{S.fx[e.target.dataset.fx]=parseFloat(e.target.value)||0;paintCcy();paintGold();}));
 }
 function paintGold(){const mc=LAST;const gpg=S.goldOz*TROY_OZ_PER_G,gpt=gpg*G_PER_TONNE,tg=mc.med/gpt;
-  $("goldRate").innerHTML=S.editRates?`gold $<input class="mkin" style="width:56px" id="goldIn" value="${S.goldOz}">/oz`:`gold $${S.goldOz}/oz`;
+  $("goldRate").innerHTML=S.editRates?`gold $<input class="mkin" style="width:56px" id="goldIn" value="${S.goldOz}"> per troy ounce`:`gold $${S.goldOz} per troy ounce`;
   $("goldOut").innerHTML=`<div style="display:flex;align-items:baseline;gap:10px">
      <span class="mono" style="font-size:26px;color:var(--amber);font-weight:600">${fmtSci(tg)}</span>
-     <span style="font-size:12px;color:var(--dim)">tonnes of gold ≡ 1 g antimatter</span></div>
-   <div class="mono" style="font-size:11px;color:var(--faint);margin-top:6px">1 t gold ≈ $${fmtSci(gpt)} · that's ≈ ${fmtSci(tg/ALL_GOLD_MINED_T,1)}× <i>all the gold ever mined</i> (~${ALL_GOLD_MINED_T.toLocaleString()} t).</div>`;
+     <span style="font-size:12px;color:var(--dim)">tonnes of gold equal the cost of 1 gram of antimatter</span></div>
+   <div class="mono" style="font-size:11px;color:var(--faint);margin-top:6px">1 tonne of gold ≈ $${fmtSci(gpt)} · that is about ${fmtSci(tg/ALL_GOLD_MINED_T,1)} times <i>all the gold ever mined</i> (~${ALL_GOLD_MINED_T.toLocaleString()} tonnes).</div>`;
   if(S.editRates&&$("goldIn"))$("goldIn").addEventListener('change',e=>{S.goldOz=parseFloat(e.target.value)||0;paintGold();paintCcy();});
 }
 function paintTornado(){const p=effParams();const base=(eta,oh,el)=>Math.log10(E_REST/eta*(el/J_PER_KWH)*oh);
   const eMid=Math.pow(10,p.etaMean),oMid=p.ohMean,elMid=p.elec;
   let rows=[
-   {k:"Efficiency η",lo:base(Math.pow(10,Math.min(p.etaMean+p.etaSd,0)),oMid,elMid),hi:base(Math.pow(10,p.etaMean-p.etaSd),oMid,elMid),c:"var(--amber)"},
+   {k:"Production efficiency",lo:base(Math.pow(10,Math.min(p.etaMean+p.etaSd,0)),oMid,elMid),hi:base(Math.pow(10,p.etaMean-p.etaSd),oMid,elMid),c:"var(--amber)"},
    {k:"Capital overhead",lo:base(eMid,oMid/Math.pow(10,0.3),elMid),hi:base(eMid,oMid*Math.pow(10,0.3),elMid),c:"var(--cyan)"},
    {k:"Electricity price",lo:base(eMid,oMid,elMid/Math.pow(10,0.15)),hi:base(eMid,oMid,elMid*Math.pow(10,0.15)),c:"var(--dim)"},
   ].map(r=>({...r,span:Math.abs(r.hi-r.lo)}));
   rows.sort((a,b)=>b.span-a.span);const mx=Math.max(...rows.map(r=>r.span),0.01);
   $("tornado").innerHTML=rows.map(r=>`<div style="margin-bottom:11px">
-    <div class="mono" style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span style="color:var(--text)">${r.k}</span><span style="color:${r.c}">±${(r.span/2).toFixed(2)} dex</span></div>
+    <div class="mono" style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span style="color:var(--text)">${r.k}</span><span style="color:${r.c}">± ${(r.span/2).toFixed(2)} orders of magnitude</span></div>
     <div style="height:9px;background:var(--panel2);border-radius:3px;overflow:hidden"><div style="width:${(r.span/mx)*100}%;height:100%;background:${r.c};opacity:.85;border-radius:3px"></div></div></div>`).join("");
 }
 function paintHist(){const mc=LAST,mx=Math.max(...mc.hist,1);
@@ -462,13 +464,13 @@ function paintHist(){const mc=LAST,mx=Math.max(...mc.hist,1);
 function paintShip(){const f=stackFactors();const n=S.shipN*f.trapCap;const trip=S.shipTrip*f.shipFixed;
   const massG=n*MP_G;const perG=massG>0?trip/massG:0;const mc=LAST;
   let verdict;
-  if(trip===0)verdict=`<span style="color:#7CFFB0">in-situ production — shipment eliminated</span>`;
-  else if(perG>mc.med)verdict=`<span style="color:var(--amber)">≈ ${fmtSci(perG/mc.med,1)}× the production cost/g — shipment dominates</span>`;
-  else verdict=`<span style="color:var(--cyan)">below production cost/g — production dominates</span>`;
-  $("shipOut").innerHTML=`<div style="font-size:11px;color:var(--dim)">shipment cost / gram</div>
+  if(trip===0)verdict=`<span style="color:#7CFFB0">produced on-site — shipment eliminated</span>`;
+  else if(perG>mc.med)verdict=`<span style="color:var(--amber)">≈ ${fmtSci(perG/mc.med,1)} times the production cost per gram — shipment dominates</span>`;
+  else verdict=`<span style="color:var(--cyan)">below the production cost per gram — production dominates</span>`;
+  $("shipOut").innerHTML=`<div style="font-size:11px;color:var(--dim)">shipment cost per gram</div>
     <div class="mono" style="font-size:28px;color:var(--amber);font-weight:600">${trip===0?"$0":"$"+fmtSci(perG)}</div>
     <div class="mono" style="font-size:11.5px;margin-top:6px">${verdict}</div>
-    <div style="font-size:10.5px;color:var(--faint);margin-top:8px">Per-trip <i>fixed</i> cost; per-gram looks astronomical only because the payload is femtograms. Crossover ≈ ${fmtSci(trip>0?trip/mc.med/MP_G:0,1)} p̄/trap. Effective payload now ${fmtSci(n,1)} p̄.</div>`;
+    <div style="font-size:10.5px;color:var(--faint);margin-top:8px">This is a <i>fixed</i> cost per trip; the per-gram figure looks astronomical only because the payload weighs just a few quadrillionths of a gram (femtograms). The break-even point — where shipment would match production — is about ${fmtSci(trip>0?trip/mc.med/MP_G:0,1)} antiprotons per trap. The effective payload is now ${fmtSci(n,1)} antiprotons.</div>`;
 }
 
 function paintInvList(){
@@ -477,19 +479,19 @@ function paintInvList(){
   $("invList").innerHTML=INVENTIONS.filter(inv=>S.horizon==="all"||inv.hz===S.horizon).map(inv=>{
     const on=S.stack.includes(inv.id);const ord=S.stack.indexOf(inv.id);
     let effLabel;
-    if(inv.kind==="ship"){effLabel=inv.shipFixed===0?"ship → 0":"ship "+fmtSci(1/inv.trapCap,0)+"× /g";}
+    if(inv.kind==="ship"){effLabel=inv.shipFixed===0?"shipment → 0":"shipment ×"+fmtSci(1/inv.trapCap,0)+" per gram";}
     else{const eta2=baseEta+Math.log10(inv.eta||1);const oh2=baseOh*(inv.overhead||1);const el2=baseEl*(inv.elec||1);
       const c=pointCost(eta2,oh2,el2);const d=Math.log10(c/baseCost);
-      effLabel=(d>=0?"+":"")+d.toFixed(1)+" OOM<br><span style='color:var(--faint)'>$"+fmtSci(c,1)+"</span>";}
+      effLabel=(d>=0?"+":"")+d.toFixed(1)+" orders of magnitude<br><span style='color:var(--faint)'>$"+fmtSci(c,1)+"</span>";}
     const tagc=inv.hz==="Near"?"#7CFFB0":inv.hz==="Mid"?"var(--cyan)":"var(--amber)";
     return `<div class="inv ${on?'on':''}" data-inv="${inv.id}">
       <div class="h">
         <div style="flex:1">
-          <div class="name">${on?`<span class="ordnum">${ord+1}</span>`:''}${inv.name} ${inv.spec?'<span class="tag">spec</span>':''}</div>
+          <div class="name">${on?`<span class="ordnum">${ord+1}</span>`:''}${inv.name} ${inv.spec?'<span class="tag">speculative</span>':''}</div>
           <div class="lever">${inv.lever}</div>
         </div>
         <div style="text-align:right">
-          <span class="tag" style="color:${tagc};border-color:${tagc}40">${inv.hz}</span>
+          <span class="tag" style="color:${tagc};border-color:${tagc}40">${HZ_LABEL[inv.hz]}</span>
           <div class="eff" style="margin-top:4px;color:${inv.kind==='ship'?'var(--cyan)':'var(--amber)'}">${effLabel}</div>
         </div>
       </div>
@@ -500,7 +502,7 @@ function paintInvList(){
 }
 
 function paintStack(){
-  if(S.stack.length===0){$("stackPanel").innerHTML=`<div style="font-size:11.5px;color:var(--faint)">No inventions applied. Click items in the catalog to build an ordered stack and watch the cost fall step by step.</div>`;return;}
+  if(S.stack.length===0){$("stackPanel").innerHTML=`<div style="font-size:11.5px;color:var(--faint)">No inventions applied yet. Click items in the catalog to build up a list and watch the cost fall step by step.</div>`;return;}
   // ordered waterfall (deterministic point cost)
   const base=pointCost(S.etaMean,S.ohMean,S.elec);
   let etaM=S.etaMean,oh=S.ohMean,el=S.elec,prev=base;
@@ -512,7 +514,7 @@ function paintStack(){
     const step=Math.log10(c/prev);prev=c;
     rows+=`<div class="stackrow">
       <span class="ordnum" style="background:var(--cyan)">${idx+1}</span>
-      <span class="nm">${inv.name}${inv.kind==="ship"?' <span class="tag">ship</span>':''}</span>
+      <span class="nm">${inv.name}${inv.kind==="ship"?' <span class="tag">shipment</span>':''}</span>
       <span style="color:${step<0?'#7CFFB0':'var(--faint)'};width:64px;text-align:right">${inv.kind==="ship"?"—":(step>=0?"+":"")+step.toFixed(2)}</span>
       <span class="mono" style="color:var(--cyan);width:96px;text-align:right">$${fmtSci(c,1)}</span>
       <button class="arrowbtn" data-up="${idx}">▲</button><button class="arrowbtn" data-down="${idx}">▼</button>
@@ -521,9 +523,9 @@ function paintStack(){
   const final=pointCost(etaM,oh,el);const totD=Math.log10(final/base);
   $("stackPanel").innerHTML=rows+
     `<div class="stackrow" style="border-top:1px solid var(--lineStrong);margin-top:4px">
-       <span class="nm" style="color:var(--amber);font-weight:600">Cumulative (point estimate)</span>
-       <span class="mono" style="color:var(--amber)">${totD.toFixed(1)} OOM · ÷${fmtSci(base/final,1)}</span></div>
-     <div style="font-size:10px;color:var(--faint);margin-top:8px"><span class="legendline" style="background:#7CFFB0"></span>energy floor (η=1) ≈ $${fmtSci(floor,1)}/g — the stack cannot cross it.</div>`;
+       <span class="nm" style="color:var(--amber);font-weight:600">Cumulative (single-number estimate)</span>
+       <span class="mono" style="color:var(--amber)">${totD.toFixed(1)} orders of magnitude · ${totD<0?fmtSci(base/final,1)+" times cheaper":fmtSci(final/base,1)+" times dearer"}</span></div>
+     <div style="font-size:10px;color:var(--faint);margin-top:8px"><span class="legendline" style="background:#7CFFB0"></span>energy floor (at 100% efficiency) ≈ $${fmtSci(floor,1)} per gram — no combination of inventions can cross it. The middle column shows how much each step changes the cost on its own, in orders of magnitude.</div>`;
   document.querySelectorAll('[data-up]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const i=+b.dataset.up;if(i>0){[S.stack[i-1],S.stack[i]]=[S.stack[i],S.stack[i-1]];update();}}));
   document.querySelectorAll('[data-down]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const i=+b.dataset.down;if(i<S.stack.length-1){[S.stack[i+1],S.stack[i]]=[S.stack[i],S.stack[i+1]];update();}}));
   document.querySelectorAll('[data-rm]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const id=+b.dataset.rm;S.stack=S.stack.filter(x=>x!==id);update();}));
@@ -532,10 +534,10 @@ function paintStack(){
 //============================ snapshots ============================
 function loadSnaps(){const out=[];for(const k of Store.keys()){if(k.indexOf("am_snap:")!==0)continue;try{out.push(JSON.parse(Store.get(k)));}catch(e){}}out.sort((a,b)=>a.t-b.t);return out;}
 function paintSnaps(){const snaps=loadSnaps();
-  if(snaps.length===0){$("snapOut").innerHTML=`<div style="font-size:11.5px;color:var(--faint)">No snapshots yet. Save one to track how your estimate moves as assumptions, market data, or the invention stack change.</div>`;return;}
+  if(snaps.length===0){$("snapOut").innerHTML=`<div style="font-size:11.5px;color:var(--faint)">No snapshots yet. Save one to track how your estimate moves as the assumptions, market data, or chosen inventions change.</div>`;return;}
   $("snapOut").innerHTML=`<table style="font-size:11.5px"><thead><tr style="color:var(--faint);font-size:10px;text-align:right">
-    <th style="text-align:left;font-weight:500">saved</th><th style="font-weight:500">species</th><th style="font-weight:500">stack</th>
-    <th style="font-weight:500">median USD/g</th><th style="font-weight:500">P5–P95</th></tr></thead><tbody>`+
+    <th style="text-align:left;font-weight:500">saved</th><th style="font-weight:500">particle</th><th style="font-weight:500">inventions</th>
+    <th style="font-weight:500">median (US dollars per gram)</th><th style="font-weight:500">5th–95th percentile</th></tr></thead><tbody>`+
     snaps.map(s=>`<tr style="border-top:1px solid var(--line)">
       <td style="padding:5px 0;color:var(--dim)">${new Date(s.t).toLocaleString(undefined,{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"})}</td>
       <td style="text-align:right;color:var(--text)">${s.preset}</td>
