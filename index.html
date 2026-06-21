@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Antimatter Cost Calculator</title>
-<meta name="description" content="A Monte Carlo instrument for the estimated cost of antimatter per gram — multi-currency, with order-of-magnitude error bands, a sensitivity view, production vs. shipment, and a 20-invention cost-reduction sandbox." />
+<meta name="description" content="Estimated cost of antimatter per gram: multi-currency, with order-of-magnitude error bands, a sensitivity view, production vs. shipment, and a speculative 20-invention cost-reduction sandbox." />
 <style>
   :root{
     --bg:#080B14; --panel:#0E1422; --panel2:#0B0F1B;
@@ -19,6 +19,7 @@
   body{padding:28px 18px 56px;}
   .wrap{max-width:1080px;margin:0 auto;}
   a{color:var(--cyan);}
+  a.src{text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px;}
   h1{font-size:30px;font-weight:700;margin:8px 0 2px;letter-spacing:-0.02em;}
   .eyebrow{font-size:10.5px;letter-spacing:0.22em;text-transform:uppercase;font-weight:600;color:var(--dim);}
   .sub{font-family:var(--mono);font-size:11.5px;color:var(--dim);}
@@ -65,7 +66,7 @@
 
   <div class="eyebrow" style="color:var(--amber)">Is Antimatter Cheap Yet</div>
   <h1>Antimatter Cost <span style="color:var(--cyan)">/</span> gram</h1>
-  <div class="sub" style="margin-bottom:22px">energy floor (E=mc² ÷ η) × electricity × capital overhead → Monte Carlo distribution · 12 000 draws · with a 20-invention cost-reduction sandbox</div>
+  <div class="sub" style="margin-bottom:22px">energy floor (E=mc² ÷ η) × electricity × capital overhead → Monte Carlo distribution · 12 000 draws · with a speculative 20-invention cost-reduction sandbox</div>
 
   <!-- HERO -->
   <div class="gridbg" style="border:1px solid var(--lineStrong);border-radius:14px;padding:22px 24px;margin-bottom:18px;overflow:hidden">
@@ -170,7 +171,7 @@
 
   <!-- SHIPMENT -->
   <div class="gridbg" style="border:1px solid var(--lineStrong);border-radius:12px;padding:18px;margin-top:18px;overflow:hidden">
-    <div class="eyebrow" style="color:var(--amber)">Shipment · BASE-STEP regime (fixed cost ÷ payload mass)</div>
+    <div class="eyebrow" style="color:var(--amber)">Shipment · <a class="src" href="https://home.cern/base-experiment-cern-succeeds-transporting-antimatter/" target="_blank" rel="noopener" style="color:inherit">BASE-STEP</a> regime (fixed cost ÷ payload mass)</div>
     <div class="row cols2" style="margin-top:12px">
       <div id="shipControls"></div>
       <div style="display:flex;flex-direction:column;justify-content:center" id="shipOut"></div>
@@ -200,7 +201,7 @@
     <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel2)">
       <iframe data-tally-src="https://tally.so/r/q4gW82?transparentBackground=1&dynamicHeight=1"
               loading="lazy" width="100%" height="240" frameborder="0" marginheight="0" marginwidth="0"
-              title="Estimated antimatter cost — annual email" style="display:block;border:0"></iframe>
+              title="Antimatter cost — yearly email update" style="display:block;border:0"></iframe>
     </div>
     <div style="font-size:10.5px;color:var(--faint);margin-top:8px">
       Form not loading? <a href="https://tally.so/r/q4gW82" target="_blank" rel="noopener">Open it in a new tab →</a>
@@ -210,22 +211,36 @@
 
   <div class="mono" style="font-size:10px;color:var(--faint);margin-top:20px;line-height:1.7">
     Model: cost/g = (9×10¹³ J/g ÷ η) × electricity[$/J] × overhead × projection × invention-stack. η, overhead, electricity sampled log-normally; η clamped ≤ 1 (energy floor). Reproduces the published spread by construction — not a measurement.
-    Market data editable, ~18 Jun 2026. Shipment grounded in CERN BASE-STEP (92 antiprotons moved by truck, 24 Mar 2026). Inventions are illustrative parameter-deltas, not forecasts.
+    Market data editable, ~18 Jun 2026. Shipment grounded in <a class="src" href="https://home.cern/base-experiment-cern-succeeds-transporting-antimatter/" target="_blank" rel="noopener">CERN BASE-STEP</a> (92 antiprotons moved by truck, 24 Mar 2026). Inventions are illustrative parameter-deltas, not forecasts.
   </div>
 </div>
 
 <script>
 //============================ constants & data ============================
-const E_REST=9.0e13, J_PER_KWH=3.6e6, AMU_G=1.6726e-24, G_PER_TONNE=1e6, TROY_OZ_PER_G=1/31.1035;
+// ---- physical constants (audited) ----
+const E_REST=9.0e13;           // m·c² for 1 g, any species: 0.001 kg × c² = 8.99e13 J (9e13 per the standard convention)
+const J_PER_KWH=3.6e6;         // 1 kWh = 1000 W × 3600 s
+const MP_G=1.6726e-24;         // antiproton (≡ proton) rest mass in GRAMS — NOT the atomic mass unit (1.6605e-24 g)
+const G_PER_TONNE=1e6;         // 1 metric tonne = 1e6 g
+const TROY_OZ_PER_G=1/31.1035; // 1 troy ounce = 31.1035 g
 const DEFAULT_FX={USD:1,EUR:0.866,CNY:6.87,CHF:0.806,JPY:161,SGD:1.282,AUD:1.425,AED:3.6725,SAR:3.75};
 const FX_PEG={AED:1,SAR:1};
 const CCY=["USD","EUR","CNY","CHF","JPY","SGD","AUD","AED","SAR"];
 const DEFAULT_GOLD_OZ=4150;
 const ALL_GOLD_MINED_T=216000;
 
+// canonical sources for the cost anchors (verified)
+const SRC={
+  nasa:"https://ntrs.nasa.gov/citations/19990080056",                 // Gerrish & Schmidt, NASA NTRS 1999 — origin of the $62.5T/g figure
+  physicsgirl:"https://www.youtube.com/watch?v=PCuyCJocJWg",           // Physics Girl, "Why This Stuff Costs $2700 Trillion Per Gram", 2019
+  pbs:"https://www.pbs.org/video/why-this-stuff-costs-2700-trillion-per-gram-jllccc/", // same video on PBS — states the $3 quadrillion figure
+  basestep:"https://home.cern/base-experiment-cern-succeeds-transporting-antimatter/"  // CERN, BASE-STEP antiproton transport, 24 Mar 2026
+};
+const link=(href,txt,extra="")=>`<a class="src" href="${href}" target="_blank" rel="noopener" ${extra}>${txt}</a>`;
+
 const PRESETS={
   positron:{label:"Positrons (e⁺)",etaMean:-5.0,etaSd:0.7,ohMean:2,anchor:"≈ $1×10¹¹ /g — cheap; PET-grade sources already exist"},
-  antiproton:{label:"Antiprotons (p̄)",etaMean:-8.0,etaSd:0.6,ohMean:3,anchor:"NASA $6.25×10¹³ /g · PBS up to $3×10¹⁵ /g"},
+  antiproton:{label:"Antiprotons (p̄)",etaMean:-8.0,etaSd:0.6,ohMean:3,anchor:link(SRC.nasa,"NASA")+" $6.25×10¹³ /g · "+link(SRC.pbs,"PBS")+" up to $3×10¹⁵ /g"},
   antihydrogen:{label:"Antihydrogen (H̄)",etaMean:-8.5,etaSd:0.6,ohMean:6,anchor:"p̄ + e⁺ + trap-assembly losses — highest of the three"}
 };
 const LIT=[{v:1e11},{v:6.25e13},{v:2.7e15},{v:3e15}];
@@ -314,7 +329,10 @@ function montecarlo(p){const N=12000,ohSd=0.3,elSd=0.15,logs=new Float64Array(N)
   for(let i=0;i<N;i++){let eta=Math.pow(10,p.etaMean+p.etaSd*randn());if(eta>1)eta=1;
     const oh=Math.pow(10,Math.log10(p.ohMean)+ohSd*randn());
     const ee=Math.pow(10,Math.log10(p.elec)+elSd*randn());
-    logs[i]=Math.log10(E_REST/eta*(ee/J_PER_KWH)*oh*proj);}
+    const floorDraw=E_REST*(ee/J_PER_KWH)*oh;          // η=1 energy floor for this draw
+    let cost=E_REST/eta*(ee/J_PER_KWH)*oh*proj;
+    if(cost<floorDraw)cost=floorDraw;                  // projection cannot beat the energy floor
+    logs[i]=Math.log10(cost);}
   const s=Array.from(logs).sort((a,b)=>a-b);
   const med=Math.pow(10,pct(s,0.5)),p5=Math.pow(10,pct(s,0.05)),p95=Math.pow(10,pct(s,0.95));
   const p25=Math.pow(10,pct(s,0.25)),p75=Math.pow(10,pct(s,0.75));
@@ -377,7 +395,7 @@ function fmtCtrl(){
   $("h_etaMean").textContent="wall-plug → stored antimatter energy"+(f.eta!==1?"  · stack ×"+fmtSci(f.eta,1):"")+". dominant uncertainty.";
   $("h_ohMean").textContent="facility, cooling, staff, storage"+(f.overhead!==1?"  · stack ×"+f.overhead.toFixed(3):"");
   $("h_projRate").textContent=S.projYears>0?("projected ×"+Math.pow(1-S.projRate,S.projYears).toExponential(1)+" vs today"):"set years > 0 to activate";
-  $("h_shipN").textContent="= "+fmtSci(S.shipN*f.trapCap)+" g/trap"+(f.trapCap!==1?" (×"+fmtSci(f.trapCap,0)+" from stack)":"")+" · BASE-STEP carried 92";
+  $("h_shipN").textContent="= "+fmtSci(S.shipN*f.trapCap*MP_G)+" g/trap ("+fmtSci(S.shipN*f.trapCap,1)+" p̄)"+(f.trapCap!==1?" · ×"+fmtSci(f.trapCap,0)+" from stack":"")+" · BASE-STEP carried 92";
 }
 
 function paintHero(mc){
@@ -395,9 +413,9 @@ function paintHero(mc){
   $("p5lab").textContent="P5  $"+fmtSci(mc.p5);
   $("p95lab").textContent="P95 $"+fmtSci(mc.p95);
   $("spreadlab").textContent="spread ≈ "+(Math.log10(mc.p95)-Math.log10(mc.p5)).toFixed(1)+" orders of magnitude";
-  $("anchorNote").innerHTML="Hairlines = published anchors (positron est. · NASA $62.5T · Physics Girl $2700T · PBS $3Q) · <span style='color:#7CFFB0'>green</span> = energy floor (η→1). Anchor: "+PRESETS[S.preset].anchor;
+  $("anchorNote").innerHTML="Hairlines = published anchors (positron est. · "+link(SRC.nasa,"NASA")+" $62.5T · "+link(SRC.physicsgirl,"Physics Girl")+" $2700T · "+link(SRC.pbs,"PBS")+" $3Q) · <span style='color:#7CFFB0'>green</span> = energy floor (η→1). Anchor: "+PRESETS[S.preset].anchor;
 }
-function deltaOOM(){const base=pointCost(S.preset?PRESETS[S.preset].etaMean:S.etaMean,PRESETS[S.preset].ohMean,0.10);
+function deltaOOM(){const base=pointCost(S.etaMean,S.ohMean,S.elec); // current sliders, no stack — matches the waterfall baseline
   const p=effParams();const now=pointCost(p.etaMean,p.ohMean,p.elec);
   const d=Math.log10(now/base);return(d>=0?"+":"")+d.toFixed(1)+" OOM";}
 
@@ -443,7 +461,7 @@ function paintHist(){const mc=LAST,mx=Math.max(...mc.hist,1);
   $("histHi").textContent="$"+fmtSci(Math.pow(10,mc.hi),1);
 }
 function paintShip(){const f=stackFactors();const n=S.shipN*f.trapCap;const trip=S.shipTrip*f.shipFixed;
-  const massG=n*AMU_G;const perG=massG>0?trip/massG:0;const mc=LAST;
+  const massG=n*MP_G;const perG=massG>0?trip/massG:0;const mc=LAST;
   let verdict;
   if(trip===0)verdict=`<span style="color:#7CFFB0">in-situ production — shipment eliminated</span>`;
   else if(perG>mc.med)verdict=`<span style="color:var(--amber)">≈ ${fmtSci(perG/mc.med,1)}× the production cost/g — shipment dominates</span>`;
@@ -451,7 +469,7 @@ function paintShip(){const f=stackFactors();const n=S.shipN*f.trapCap;const trip
   $("shipOut").innerHTML=`<div style="font-size:11px;color:var(--dim)">shipment cost / gram</div>
     <div class="mono" style="font-size:28px;color:var(--amber);font-weight:600">${trip===0?"$0":"$"+fmtSci(perG)}</div>
     <div class="mono" style="font-size:11.5px;margin-top:6px">${verdict}</div>
-    <div style="font-size:10.5px;color:var(--faint);margin-top:8px">Per-trip <i>fixed</i> cost; per-gram looks astronomical only because the payload is femtograms. Crossover ≈ ${fmtSci(trip>0?trip/mc.med/AMU_G:0,1)} p̄/trap. Effective payload now ${fmtSci(n,1)} p̄.</div>`;
+    <div style="font-size:10.5px;color:var(--faint);margin-top:8px">Per-trip <i>fixed</i> cost; per-gram looks astronomical only because the payload is femtograms. Crossover ≈ ${fmtSci(trip>0?trip/mc.med/MP_G:0,1)} p̄/trap. Effective payload now ${fmtSci(n,1)} p̄.</div>`;
 }
 
 function paintInvList(){
@@ -487,13 +505,12 @@ function paintStack(){
   // ordered waterfall (deterministic point cost)
   const base=pointCost(S.etaMean,S.ohMean,S.elec);
   let etaM=S.etaMean,oh=S.ohMean,el=S.elec,prev=base;
-  const floor=energyFloor();const L=Math.log10(floor),topV=Math.log10(base);
+  const floor=energyFloor();
   let rows="";
   S.stack.forEach((id,idx)=>{const inv=INVENTIONS.find(x=>x.id===id);
     if(inv.kind!=="ship"){etaM+=Math.log10(inv.eta||1);oh*=(inv.overhead||1);el*=(inv.elec||1);}
     const c=inv.kind==="ship"?prev:pointCost(etaM,oh,el);
     const step=Math.log10(c/prev);prev=c;
-    const frac=Math.max(0,Math.min(1,(Math.log10(c)-L)/(topV-L||1)));
     rows+=`<div class="stackrow">
       <span class="ordnum" style="background:var(--cyan)">${idx+1}</span>
       <span class="nm">${inv.name}${inv.kind==="ship"?' <span class="tag">ship</span>':''}</span>
