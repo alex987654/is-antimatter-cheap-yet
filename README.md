@@ -2,17 +2,16 @@
 
 Antimatter Cost Calculator
 
-This project contains a single-file, zero-dependency Monte Carlo based estimator utility for the **cost of antimatter per gram**. It reports the cost as a *distribution* (not a point estimate) with output in nine currencies, compares it to a metric tonne of gold, separates **production** of antimatter from the cost of **shipment**, ranks which assumption owns the uncertainty, and includes a speculative **20-invention sandbox** that lets you apply cost-reduction technologies — individually or as an ordered, cumulative stack — and watch the estimate move. You can snapshot any state to track it over time, and visitors can opt in to a once-a-year email update.
+This project contains a single-file, zero-dependency Monte Carlo based estimator utility for the **cost of antimatter per gram**. It covers production and shipment. It reports the cost as a *distribution* (not a point estimate) with output in nine currencies, compares it to a metric tonne of gold, separates **production** of antimatter from the cost of **shipment**, ranks which assumption owns the uncertainty, and includes a speculative **20-invention sandbox** that lets you apply cost-reduction technologies — individually or as an ordered, cumulative stack — and watch the estimate move. You can snapshot any state to track it over time, and visitors can opt in to a once-a-year email update.
 
-Live page: `https://alex987654.github.io/is-antimatter-cheap-yet/`
+Live page: 
+* [Is Antimatter Cheap Yet](https://alex987654.github.io/is-antimatter-cheap-yet/)
 
-It is intended to be a reasoning and communication tool, **not as an authoritative or definitive source**. Every number is a transparent reconstruction of public estimates with editable assumptions; the value is in seeing *which assumption moves the answer*, not in any single figure.
+Please note: It does not account for alternative scenarios yet, i.e. by collecting antimatter instead of producing it, or by using cosmic rays or the like. It is rather intended to be a reasoning and communication tool, **not as an authoritative or definitive source**. Every number is a transparent reconstruction of public estimates with editable assumptions; the value is in seeing *which assumption moves the answer*, not in any single figure.
 
 ---
 
 ## Understanding the estimate — three readings
-
-The same calculation can be explained from three angles. 
 
 ### Physics
 
