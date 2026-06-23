@@ -80,7 +80,7 @@ A note on two derived readouts: the hero's "N inventions · ±X OOM" badge and t
 
 Grounded in CERN's **BASE-STEP** result: on 24 March 2026 a ~1-tonne cryogenic Penning trap carried **92 antiprotons** by truck across CERN's Meyrin site — the first controlled, reversible transport of antimatter. 92 antiprotons weigh ~`1.5×10⁻²² g`, so at a few hundred thousand dollars per run the *per-gram* shipment cost is ~`10²⁷ $/g` — about twelve orders of magnitude above production. The takeaway baked into the UI: **shipment is a per-trip fixed cost, not a per-gram cost.** Raise the trap capacity and the per-gram figure collapses; the panel shows the crossover payload at which shipment would equal production.
 
-## The 20-invention sandbox
+## The 22-invention sandbox
 
 Each invention is a **parameter delta** (e.g. `η ×8`, `overhead ×0.35`, `electricity ×0.35`, trap-capacity `×10⁷`, or shipment `→ 0`), tagged by horizon (**Near** ≤5 yr / **Mid** 5–20 yr / **Far** 20 yr+) and flagged `spec` when speculative. The catalog shows each item's **standalone** effect; clicking adds it to an **ordered stack** whose waterfall shows the cumulative path.
 
