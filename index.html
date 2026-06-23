@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Antimatter Cost Calculator</title>
-<meta name="description" content="A Monte Carlo simulation grounded estimate for the cost of antimatter per gram: multi-currency, with order-of-magnitude error bands, a sensitivity view, production vs. shipment, and a 20-invention cost-reduction sandbox." />
+<meta name="description" content="A Monte Carlo simulation grounded estimate for the cost of antimatter per gram — multi-currency, with order-of-magnitude error bands, a sensitivity view, production vs. shipment, and a 22-invention cost-reduction sandbox." />
 <style>
   :root{
     --bg:#080B14; --panel:#0E1422; --panel2:#0B0F1B;
@@ -64,9 +64,9 @@
 <body>
 <div class="wrap">
 
-  <div class="eyebrow" style="color:var(--amber)">Is Antimatter Cheap Yet</div>
+  <div class="eyebrow" style="color:var(--amber)">💥Is Antimatter Cheap Yet💥</div>
   <h1>Antimatter Cost <span style="color:var(--cyan)">/</span> gram</h1>
-  <div class="sub" style="margin-bottom:22px">The lowest possible cost comes from the energy locked in the mass (Einstein's relationship E=mc^2), divided by how efficiently we can produce antimatter, then multiplied by the electricity price and a capital-overhead factor. The result is shown as a full range of outcomes built from 12000 randomized trials (a method called Monte Carlo simulation), alongside a sandbox of 20 cost-reducing inventions.</div>
+  <div class="sub" style="margin-bottom:22px">The lowest possible cost comes from the energy locked in the mass (Einstein's relationship E=mc^2), divided by how efficiently we can produce antimatter, then multiplied by the electricity price and a capital-overhead factor. The result is shown as a full range of outcomes built from 12000 randomized trials (a method called Monte Carlo simulation), alongside a sandbox of 22 cost-reducing inventions.</div>
 
   <!-- HERO -->
   <div class="gridbg" style="border:1px solid var(--lineStrong);border-radius:14px;padding:22px 24px;margin-bottom:18px;overflow:hidden">
@@ -101,7 +101,7 @@
       <div style="height:8px"></div>
       <div id="projControls"></div>
       <div style="font-size:10.5px;color:var(--faint);margin-top:10px;line-height:1.6">
-        Treat this as a smoothed background trend, not a forecast. The decline compounds each decade (it does not fall in a straight line), and it is set per decade on purpose — year-to-year change is not something we can realistically resolve. In reality cost would not glide down smoothly at all; it would sit roughly flat and then drop abruptly as each new breakthrough lands. Those discrete jumps are what the invention catalog below models, the slider is only intended to be the trend underneath them.
+        Treat this as a smoothed background trend, not a forecast. The decline compounds each decade (it does not fall in a straight line), and it is set per decade on purpose — year-to-year change is not something we can realistically resolve. In reality cost would not glide down smoothly at all; it would sit roughly flat and then drop abruptly as each new breakthrough lands. Those discrete jumps are what the invention catalog below models — this slider is only the gentle trend underneath them.
       </div>
     </div>
     <!-- outputs -->
@@ -124,7 +124,7 @@
       <div class="panel">
         <div class="eyebrow" style="color:var(--amber)">Sensitivity · which input drives the uncertainty</div>
         <div id="tornado" style="margin-top:12px"></div>
-        <div style="font-size:10.5px;color:var(--faint);margin-top:4px">Each bar shows how far the result swings (in orders of magnitude, i.e. factors of ten) when that one input is moved by a single standard deviation while the others are held fixed. The production efficiency usually dominates, so how reliable any estimate is depends on pinning that efficiency down.</div>
+        <div style="font-size:10.5px;color:var(--faint);margin-top:4px">Each bar shows how far the result swings (in orders of magnitude — that is, factors of ten) when that one input is moved by a single standard deviation while the others are held fixed. The production efficiency usually dominates, so how reliable any estimate is depends on pinning that efficiency down.</div>
       </div>
     </div>
   </div>
@@ -133,7 +133,7 @@
   <div class="panel" style="margin-top:18px">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
       <div class="eyebrow" style="color:var(--amber)">Cost distribution · shown on a logarithmic scale, in US dollars per gram</div>
-      <button class="btn sm" id="reroll" title="Draw a fresh set of 12,000 random samples">↻ re-roll sample</button>
+      <button class="btn sm" id="reroll" title="Draw a fresh set of 12000 random samples">↻ re-roll sample</button>
     </div>
     <div id="hist" style="display:flex;align-items:flex-end;gap:2px;height:90px;margin-top:14px"></div>
     <div class="mono" style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--faint);margin-top:6px">
@@ -148,7 +148,7 @@
   <div class="gridbg" style="border:1px solid var(--lineStrong);border-radius:14px;padding:20px;margin-top:18px;overflow:hidden">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
       <div>
-        <div class="eyebrow" style="color:var(--amber)">Cost-reduction sandbox · 20 inventions</div>
+        <div class="eyebrow" style="color:var(--amber)">Cost-reduction sandbox · 22 inventions</div>
         <div class="sub" style="margin-top:5px">Click an invention to add it to your applied list — each one shows its effect on its own; the list shows the running cumulative effect as you build it up, with everything else held constant.</div>
       </div>
       <div style="display:flex;gap:6px;align-items:center">
@@ -172,7 +172,7 @@
         <div class="eyebrow" style="margin-bottom:8px">Applied inventions · running cumulative impact</div>
         <div id="stackPanel" class="panel" style="background:var(--panel2)"></div>
         <div style="font-size:10.5px;color:var(--faint);margin-top:8px">
-          The end result is the same no matter what order you apply the inventions in (their effects multiply together). The path to get there depends on the order. Use the up and down arrows to reorder them and read how much each step adds on its own. The energy-floor line marks the lowest cost reachable if efficiency were 100%, a limit no combination of inventions can cross.
+          The end result is the same no matter what order you apply the inventions in (their effects multiply together). The path to get there depends on the order — use the up and down arrows to reorder them and read how much each step adds on its own. The energy-floor line marks the lowest cost reachable if efficiency were 100%, a limit no combination of inventions can cross.
         </div>
       </div>
     </div>
@@ -255,7 +255,7 @@ const PRESETS={
 };
 const LIT=[{v:1e11},{v:6.25e13},{v:2.7e15},{v:3e15}];
 
-// 20 inventions. effects multiply parameters: eta>1 improves efficiency (cost↓);
+// 22 inventions. effects multiply parameters: eta>1 improves efficiency (cost↓);
 // overhead/elec <1 reduce cost; trapCap multiplies shipment payload; shipFixed scales trip cost.
 const INVENTIONS=[
  {id:1, name:"Optimized production targets", lever:"efficiency ×2.5", hz:"Near", kind:"prod", eta:2.5,
@@ -297,7 +297,11 @@ const INVENTIONS=[
  {id:19,name:"Reduced-cooling / warm confinement", lever:"overhead ×0.75", hz:"Far", kind:"prod", overhead:0.75, spec:true,
    desc:"New confinement needing less (or no) deep cooling for storage."},
  {id:20,name:"On-site production at the point of use", lever:"shipment → 0", hz:"Far", kind:"ship", shipFixed:0, spec:true,
-   desc:"Make it where it's needed and eliminate transport entirely."}
+   desc:"Make it where it's needed and eliminate transport entirely."},
+ {id:21,name:"Sun-proximate space-based solar power", lever:"electricity ×0.1", hz:"Far", kind:"prod", elec:0.1, spec:true,
+   desc:"Run the factory in space beside a solar array close to the Sun (about 0.2 astronomical units, where sunlight is ~25× stronger), with no atmosphere, no night, no land, and no power beamed to Earth — pushing energy cost well below grid rates. Best treated as an alternative to co-located cheap power (#13), not stacked on top of it."},
+ {id:22,name:"In-space manufacturing from mined material", lever:"overhead ×0.5", hz:"Far", kind:"prod", overhead:0.5, spec:true,
+   desc:"Build the arrays, accelerators, and facility from asteroid-mined material processed in space, removing the Earth-launch cost that dominates any orbital system (over 70% of the bill) — which is what makes a sun-proximate power station affordable in the first place."}
 ];
 
 //============================ utils ============================
